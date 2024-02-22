@@ -79,15 +79,23 @@ export const updateSynapses = (
   return updatedSynapses;
 };
 
+type calculateEpochOutputType = {
+  finalSynapses: synapseType,
+  finalAverageEpochError: number
+}
+
 export const calculateEpoch = (
   trainingSets: trainingSetType[],
   initialSynapse: synapseType,
   stopCondition: number,
   maxEpochs: number
-): synapseType => {
+): calculateEpochOutputType => {
   const epochError = 1;
   let epochCounter = 1;
-  let currentSynapses = initialSynapse;
+  let currentSynapses = {...initialSynapse};
+  let finalAverageEpochError = 0;
+
+  console.log(currentSynapses)
 
   while (epochCounter <= maxEpochs && epochError > stopCondition) {
     console.log(`============EPOCH ${epochCounter}============\n`);
@@ -110,8 +118,6 @@ export const calculateEpoch = (
 
       const updatedSynapes = updateSynapses(currentSynapses, deltaW);
       currentSynapses = updatedSynapes;
-
-      console.log("Synapses: ", currentSynapses);
     });
 
     const sumOfEpochErrors = epochErrors.reduce(
@@ -119,16 +125,16 @@ export const calculateEpoch = (
       0
     );
     const averageEpochError = sumOfEpochErrors / trainingSets.length;
+    finalAverageEpochError = averageEpochError;
 
     epochCounter += 1;
 
     console.log("Epoch Errors: ", epochErrors);
     console.log("Average Epoch Errors: ", averageEpochError);
-    // console.log("Synapses: ", currentSynapses);
     console.log("\n");
   }
 
-  return currentSynapses;
+  return { finalSynapses: currentSynapses, finalAverageEpochError };
 };
 
 export const testPerceptron = (
