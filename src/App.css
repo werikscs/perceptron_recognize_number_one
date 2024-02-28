@@ -9,3 +9,13 @@
   display: flex;
   flex-direction: column;
 }
+
+.testingForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.trainedSynapses  {
+  display: flex;
+  flex-direction: column;
+}

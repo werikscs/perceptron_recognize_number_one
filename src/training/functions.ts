@@ -79,7 +79,7 @@ export const updateSynapses = (
   return updatedSynapses;
 };
 
-type calculateEpochOutputType = {
+export type calculateEpochOutputType = {
   finalSynapses: synapseType,
   finalAverageEpochError: number
 }
