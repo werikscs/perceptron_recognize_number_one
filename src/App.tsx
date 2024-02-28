@@ -24,7 +24,7 @@ function App() {
   })
 
   const refTestingForm = useRef({
-    inputData: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    testingData: [0, 0, 0, 0, 0, 0, 0, 0, 0]
   })
 
   const synapseString = `bias: ${synapses.bias}, data: ${synapses.data}`
@@ -94,7 +94,7 @@ function App() {
 
     refTestingForm.current = {
       ...refTestingForm.current,
-      inputData: strToArr.map(value => parseFloat(value))
+      testingData: strToArr.map(value => parseFloat(value))
     }
   }
 
@@ -113,23 +113,19 @@ function App() {
       maxEpochs
     )
 
-    console.log(output)
-
     setTrainingOutput(output)
   }
 
   const handleSubmitTestPerceptron = (event: FormEvent) => {
     event.preventDefault()
 
-    const inputData: trainingSetType = {
+    const testingData: trainingSetType = {
       bias: 1,
-      inputData: refTestingForm.current.inputData,
+      testingData: refTestingForm.current.testingData,
       desiredOutput: 1
     }
     const trainedSynapses: synapseType = trainingOutput!.finalSynapses
-    const output = testPerceptron(inputData, trainedSynapses)
-
-    console.log(output)
+    const output = testPerceptron(testingData, trainedSynapses)
     
     setTestingOutput(Boolean(output))
   }
@@ -138,6 +134,7 @@ function App() {
     <>
       <h1>Neurônio Perceptron</h1>
       <h2>Reconhecimento do dígito 1</h2>
+      <h2>Treinar Perceptron</h2>
       <form className='trainingForm' onSubmit={handleSubmitTraining} onChange={onChangeTrainingForm}>
         <label htmlFor="stopCondition">Condição de parada (entre 0 e 1)</label>
         <input name="stopCondition" id="stopCondition" defaultValue={0.5} placeholder="ex.: 0.00001" />
@@ -151,7 +148,8 @@ function App() {
       {trainingOutput && (
         <>
           <div className='trainingResult'>
-            <h2>Resultado do Treinamento</h2>
+            <h3>Resultado do Treinamento</h3>
+            <p className='trainedEpochs'>Épocas: {trainingOutput.epochs}</p>
             <p className='trainedError'>Erro médio: {trainingOutput.finalAverageEpochError}</p>
             <p className='trainedBias'>Bias: {trainingOutput.finalSynapses.bias}</p>
             <p className='trainedSynapses'>Sinapses
@@ -164,14 +162,14 @@ function App() {
           </div>
           <h2>Testar Perceptron</h2>
           <form className='testingForm' onSubmit={handleSubmitTestPerceptron} onChange={onChangeTestingForm}>
-            <label htmlFor="inputData">Entrada</label>
-            <input name="inputData" id="inputData" placeholder='ex.: 1,1,1,0,0,0,1,1,1'/>
+            <label htmlFor="testingData">Entrada</label>
+            <input name="testingData" id="testingData" placeholder='ex.: 1,1,1,0,0,0,1,1,1'/>
             <button type="submit" disabled={testingError}>Testar</button>
           </form>
           <div className='testingResult'>
             {testingOutput !== undefined && (
               <>
-                <h2>Resultado do Teste</h2>
+                <h3>Resultado do Teste</h3>
                 <p>{testingOutput ? 'O perceptron reconheceu o dígito 1' : 'O perceptron não reconheceu o dígito 1'}</p>
               </>
             )}

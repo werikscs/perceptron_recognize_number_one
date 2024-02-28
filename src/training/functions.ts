@@ -80,6 +80,7 @@ export const updateSynapses = (
 };
 
 export type calculateEpochOutputType = {
+  epochs: number,
   finalSynapses: synapseType,
   finalAverageEpochError: number
 }
@@ -90,14 +91,13 @@ export const calculateEpoch = (
   stopCondition: number,
   maxEpochs: number
 ): calculateEpochOutputType => {
-  const epochError = 1;
+  let epochError = 1;
   let epochCounter = 1;
   let currentSynapses = {...initialSynapse};
-  let finalAverageEpochError = 0;
 
   console.log(currentSynapses)
 
-  while (epochCounter <= maxEpochs && epochError > stopCondition) {
+  while (epochCounter < maxEpochs && epochError > stopCondition) {
     console.log(`============EPOCH ${epochCounter}============\n`);
 
     const epochErrors: number[] = [];
@@ -125,7 +125,7 @@ export const calculateEpoch = (
       0
     );
     const averageEpochError = sumOfEpochErrors / trainingSets.length;
-    finalAverageEpochError = averageEpochError;
+    epochError = averageEpochError;
 
     epochCounter += 1;
 
@@ -134,7 +134,7 @@ export const calculateEpoch = (
     console.log("\n");
   }
 
-  return { finalSynapses: currentSynapses, finalAverageEpochError };
+  return { epochs: epochCounter, finalSynapses: currentSynapses, finalAverageEpochError: epochError };
 };
 
 export const testPerceptron = (
