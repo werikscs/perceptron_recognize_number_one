@@ -121,7 +121,7 @@ function App() {
 
     const testingData: trainingSetType = {
       bias: 1,
-      testingData: refTestingForm.current.testingData,
+      inputData: refTestingForm.current.testingData,
       desiredOutput: 1
     }
     const trainedSynapses: synapseType = trainingOutput!.finalSynapses
